@@ -1,0 +1,9 @@
+
+# Archivos de ejecucion de vscode
+.vscode/
+
+# Cache del Cpython
+__pycache__/
+
+# Entorno virtual (Se subira al repositorio el requirements.txt para la instalacion del entorno)
+.venv/

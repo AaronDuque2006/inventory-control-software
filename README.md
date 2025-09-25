@@ -1,2 +1,13 @@
 # inventory-control-software
-i'll fill that as soon as i organize my ideas
+
+## What is this project about?
+
+Want to design a Web App to organize the inventory and differents finances stuff in any small business. 
+
+## Technologies
+
+Python (Flask) for Rest APIs 
+
+Want to use React for front-end design and MySql for database.
+
+Also want to use Json Web Tokens to Auth an admin user and employee user.
