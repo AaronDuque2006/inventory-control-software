@@ -14,4 +14,5 @@ Also want to use Json Web Tokens to Auth an admin user and employee user.
 
 ## Comand to activate virtual enviroumnet 
 
-.\.venv\Scripts\activate
+.\.venv\Scripts\activate -> Windows 
+source venv/bin/activate -> Linux/MacOS
