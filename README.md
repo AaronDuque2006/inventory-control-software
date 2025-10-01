@@ -39,3 +39,5 @@ Also want to use Json Web Tokens to Auth an admin user and employee user.
 
 #### Linux 
 ```source .venv/bin/activate```
+
+```flask run --debug```

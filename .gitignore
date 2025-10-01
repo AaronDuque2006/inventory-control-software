@@ -7,3 +7,6 @@ __pycache__/
 
 # Entorno virtual (Se subira al repositorio el requirements.txt para la instalacion del entorno)
 .venv/
+.qodo/
+.mypy_cache/
+.env
