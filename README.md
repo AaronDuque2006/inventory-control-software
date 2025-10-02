@@ -78,11 +78,13 @@ Now, use the `mysql` command to import all data from the SQL dump file, which is
 
 > **Note:** Execute this command from the root directory of your project.
 
-```bash
+Linux
+```
 mysql -u root -p inventory_control_db < src/database/inventory_control_db.sql
 ```
 
-```windows
+Windows
+```
 "C:\xampp\mysql\bin mysql" -u root -p inventory_control_db < "src/database/inventory_control_db.sql"
 ```
 
