@@ -42,7 +42,7 @@ Also want to use Json Web Tokens to Auth an admin user and employee user.
 
 ---
 
-## Directory Structure 
+## Directories Structure 
 
 ![alt text](image.png)
 
@@ -94,7 +94,7 @@ After running the command, you will be prompted for your MySQL root password.
 
 ### Verification
 
-If the command executes without errors, the database has been successfully cloned and populated with all necessary tables and data. You can now run the Flask application.
+If the command executes without errors, the database has been successfully cloned and populated with all necessary tables and data. 
 
 ## How to run the code
 
