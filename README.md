@@ -102,5 +102,7 @@ If the command executes without errors, the database has been successfully clone
 
 2. Once did this, run this command ```flask run --debug```.
 
+--- 
+
 
 
