@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from ..database.db import connect_db, mysql
-from ..database.controller import execute_query
+from ..database.controller import execute_query, add_user
 
 
 app = Flask(__name__) 
@@ -36,10 +36,10 @@ def get_data():
     #return jsonify(users) # Respuesta JSON con los datos sin mensaje
     
 #Routa para consultar datos con parametros
-@app.route('/api/data/<int:user_id>', methods=['GET'])
-def get_data_by_id(user_id):
-    query = 'SELECT * FROM usuarios WHERE id = %s'
-    params = (user_id,)
+@app.route('/api/data/<cedula>', methods=['GET'])
+def get_data_by_id(cedula):
+    query = 'SELECT * FROM usuarios WHERE cedula = %s'
+    params = (cedula,)
     data = execute_query(app, query, params) # Usar la función consultar para obtener los datos
     if data:
         fila = data[0] # Obtener la primera fila del resultado
@@ -57,6 +57,34 @@ def get_data_by_id(user_id):
         return jsonify({'user': user, 'mensaje': 'Datos obtenidos con éxito'}) # Respuesta JSON con mensaje de éxito
     else:
         return jsonify({'mensaje': 'Usuario no encontrado'}), 404 # Respuesta JSON si no se encuentra el usuario
+    
+#Registrar usuario 
+@app.route('/api/data', methods=['POST'])
+def api_add_user():
+    # 1. La Query debe usar los marcadores de posición %s DIRECTAMENTE, sin format()
+    query = '''
+    INSERT INTO usuarios (cedula, rif, nombres, apellidos, telefono, email, direccion, password) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    '''
+    
+    data = request.get_json() 
+    print(data)
+    # 2. Tupla de Parámetros
+    params = (
+        data['cedula'], 
+        data['rif'], 
+        data['nombres'], 
+        data['apellidos'], 
+        data['telefono'], 
+        data['email'], 
+        data['direccion'], 
+        data['password']
+    )
+    # 3. Llamada a la función de controlador
+    if add_user(app, query, params):
+        return jsonify({'mensaje': 'Usuario agregado con éxito'}), 201
+    else:
+        return jsonify({'mensaje': 'Error al agregar usuario', 'error': 'Revisa el log'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
