@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from ..database.db import connect_db, mysql
-from ..database.controller import execute_query, add_user
+from ..database.controller import read_user, add_user
 
 
 app = Flask(__name__) 
@@ -19,7 +19,7 @@ def home():
 def get_data():
     query = 'SELECT * FROM usuarios'
     users = []
-    data = execute_query(app, query) # Usar la función consultar para obtener los datos
+    data = read_user(app, query) # Usar la función consultar para obtener los datos
     for fila in data: # Iterar sobre los resultados y construir la lista de usuarios
         users.append({
             'id': fila[0],
@@ -40,7 +40,7 @@ def get_data():
 def get_data_by_id(cedula):
     query = 'SELECT * FROM usuarios WHERE cedula = %s'
     params = (cedula,)
-    data = execute_query(app, query, params) # Usar la función consultar para obtener los datos
+    data = read_user(app, query, params) # Usar la función consultar para obtener los datos
     if data:
         fila = data[0] # Obtener la primera fila del resultado
         user = {
@@ -61,7 +61,6 @@ def get_data_by_id(cedula):
 #Registrar usuario 
 @app.route('/api/data', methods=['POST'])
 def api_add_user():
-    # 1. La Query debe usar los marcadores de posición %s DIRECTAMENTE, sin format()
     query = '''
     INSERT INTO usuarios (cedula, rif, nombres, apellidos, telefono, email, direccion, password) 
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
@@ -82,7 +81,7 @@ def api_add_user():
     )
     # 3. Llamada a la función de controlador
     if add_user(app, query, params):
-        return jsonify({'mensaje': 'Usuario agregado con éxito'}), 201
+        return jsonify({'mensaje': 'Usuario agregado con éxito'})
     else:
         return jsonify({'mensaje': 'Error al agregar usuario', 'error': 'Revisa el log'}), 500
 

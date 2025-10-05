@@ -1,4 +1,4 @@
-def execute_query(self, query, params=None):
+def read_user(self, query, params=None):
         cursor = self.mysql.connection.cursor()
         cursor.execute(query, params or ())
         results = cursor.fetchall()
