@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from ..database.db import connect_db, mysql
-from ..database.controller import read_user, add_user
+from ..database.controller import *
 
 
 app = Flask(__name__) 
@@ -34,7 +34,7 @@ def get_data():
         })
     return jsonify({'users': users, 'mensaje': 'Datos obtenidos con éxito'}) # Respuesta JSON con mensaje de éxito
     #return jsonify(users) # Respuesta JSON con los datos sin mensaje
-    
+
 #Routa para consultar datos con parametros
 @app.route('/api/data/<cedula>', methods=['GET'])
 def get_data_by_id(cedula):
@@ -57,15 +57,20 @@ def get_data_by_id(cedula):
         return jsonify({'user': user, 'mensaje': 'Datos obtenidos con éxito'}) # Respuesta JSON con mensaje de éxito
     else:
         return jsonify({'mensaje': 'Usuario no encontrado'}), 404 # Respuesta JSON si no se encuentra el usuario
-    
+
 #Registrar usuario 
-@app.route('/api/data', methods=['POST'])
+@app.route('/api/data', methods=['POST']) #El metodo POST se utiliza para crear un nuevo recurso
 def api_add_user():
+    # Verificar si el usuario ya existe
+    query_verification = 'SELECT * FROM usuarios WHERE cedula = %s'
+    params_verification = (request.get_json().get('cedula'),)
+    if verify_user(app, query_verification, params_verification):
+        return jsonify({'mensaje': 'Error: El usuario ya existe'}), 400
+    
     query = '''
     INSERT INTO usuarios (cedula, rif, nombres, apellidos, telefono, email, direccion, password) 
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     '''
-    
     data = request.get_json() 
     print(data)
     # 2. Tupla de Parámetros
@@ -84,6 +89,8 @@ def api_add_user():
         return jsonify({'mensaje': 'Usuario agregado con éxito'})
     else:
         return jsonify({'mensaje': 'Error al agregar usuario', 'error': 'Revisa el log'}), 500
+    
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug = True)
