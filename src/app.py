@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request
-from ..database.db import connect_db, mysql
-from ..database.controller import *
-
+from database.db import connect_db, mysql
+from database.controller import *
 
 app = Flask(__name__) 
 
@@ -90,7 +89,6 @@ def api_add_user():
     else:
         return jsonify({'mensaje': 'Error al agregar usuario', 'error': 'Revisa el log'}), 500
     
-
 
 if __name__ == '__main__':
     app.run(debug = True)
