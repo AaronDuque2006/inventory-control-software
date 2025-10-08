@@ -1,21 +1,25 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from routes.auth import auth_bp
 from database.db import connect_db, mysql
-from database.controller import *
+from database.controller import * 
 
 app = Flask(__name__) 
+
+app.register_blueprint(auth_bp)
 
 # Se llama a la funcion para conectar la base de datos con la app
 connect_db(app)
 # Registrar la extensión mysql en el objeto app para acceso en las rutas
 app.mysql = mysql
 
-@app.route('/')
+'''
+@app.route('/') 
 def home():
     return render_template('ej1.html')
 
 # Primera Prueba de API
 @app.route('/api/data', methods=['GET'])
-def get_data():
+def get_data(): 
     query = 'SELECT * FROM usuarios'
     users = []
     data = read_user(app, query) # Usar la función consultar para obtener los datos
@@ -23,11 +27,11 @@ def get_data():
         users.append({
             'id': fila[0],
             'cedula': fila[1],
-            'rif': fila[2],
+            'rif': fila[2], 
             'nombres': fila[3],
             'apellidos': fila[4],
             'telefono': fila[5],
-            'email': fila[6],
+            'email': fila[6], 
             'direccion': fila[7],
             'password': fila[8]
         })
@@ -55,7 +59,7 @@ def get_data_by_id(cedula):
         }
         return jsonify({'user': user, 'mensaje': 'Datos obtenidos con éxito'}) # Respuesta JSON con mensaje de éxito
     else:
-        return jsonify({'mensaje': 'Usuario no encontrado'}), 404 # Respuesta JSON si no se encuentra el usuario
+        return jsonify({'mensaje': 'Usuario no encontrado'}),  404 # Respuesta JSON si no se encuentra el usuario
 
 #Registrar usuario 
 @app.route('/api/data', methods=['POST']) #El metodo POST se utiliza para crear un nuevo recurso
@@ -66,10 +70,10 @@ def api_add_user():
     if verify_user(app, query_verification, params_verification):
         return jsonify({'mensaje': 'Error: El usuario ya existe'}), 400
     
-    query = '''
+    query = ''''''
     INSERT INTO usuarios (cedula, rif, nombres, apellidos, telefono, email, direccion, password) 
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    '''
+    ''''''
     data = request.get_json() 
     print(data)
     # 2. Tupla de Parámetros
@@ -88,7 +92,11 @@ def api_add_user():
         return jsonify({'mensaje': 'Usuario agregado con éxito'})
     else:
         return jsonify({'mensaje': 'Error al agregar usuario', 'error': 'Revisa el log'}), 500
-    
+'''
+
+@app.route('/')
+def home():
+    return redirect(url_for('auth.login'))
 
 if __name__ == '__main__':
     app.run(debug = True)
